@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  my-node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=development
+      - PGUSER='postgres'
+      - PGHOST='localhost'
+      - PGDATABASE='db_postgres'
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    tty: true
+    depends_on:
+      - postgres
+    links:
+      - postgres
+
+  postgres:
+    image: postgres:13.3
+    container_name: postgres1
+    environment:
+      POSTGRES_DB: "db_postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "admin"
+    volumes:
+      - nps_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+volumes:
+  nps_data: {}
